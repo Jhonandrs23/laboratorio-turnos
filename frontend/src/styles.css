@@ -1,0 +1,26 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  --blue: #004481;
+  --aqua: #00a5b5;
+  --green: #2dcc70;
+  --ink: #102033;
+  --muted: #667085;
+  --line: #d9e2ec;
+  --soft: #f3f7fb;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--soft);
+  color: var(--ink);
+}
+
+button {
+  font: inherit;
+}
