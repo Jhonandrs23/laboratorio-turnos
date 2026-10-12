@@ -1,0 +1,82 @@
+<main class="shell">
+  <nav class="topbar">
+    <div>
+      <span class="brand-mark">LAB</span>
+      <strong>Turnos Clinicos</strong>
+    </div>
+    <div class="nav-actions">
+      <a href="/clientes" [class.active]="isClientsScreen">Pantalla clientes</a>
+      <a href="/ventanillas" [class.active]="isWindowsScreen">Ventanillas</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <p>Laboratorio clinico</p>
+      <h1>Asignacion de turnos</h1>
+    </div>
+    <button type="button" class="ghost" (click)="resetSystem()" [disabled]="loading">Reiniciar</button>
+  </section>
+
+  <section *ngIf="message" class="notice">{{ message }}</section>
+
+  <section *ngIf="isClientsScreen" class="client-layout">
+    <div class="turn-panel">
+      <p class="label">Solicitar atencion</p>
+      <h2>Genere su turno</h2>
+      <button type="button" class="primary-action" (click)="createTurn()" [disabled]="loading">
+        {{ loading ? 'Procesando...' : 'Generar turno' }}
+      </button>
+      <div class="ticket" [class.empty]="!lastTurn">
+        <span>Su turno</span>
+        <strong>{{ lastTurn || 'A--' }}</strong>
+      </div>
+    </div>
+
+    <div class="display-panel">
+      <div class="display-header">
+        <span>Turnos en atencion</span>
+        <strong>{{ activeWindows.length }}</strong>
+      </div>
+      <div class="called-grid">
+        <article *ngFor="let windowItem of activeWindows" class="called-card">
+          <span>{{ windowItem.name }}</span>
+          <strong>{{ windowItem.currentTurn }}</strong>
+        </article>
+        <article *ngIf="activeWindows.length === 0" class="empty-state">Aun no hay turnos en atencion.</article>
+      </div>
+    </div>
+
+    <div class="queue-panel">
+      <div class="display-header">
+        <span>Cola de espera</span>
+        <strong>{{ status.waiting.length }}</strong>
+      </div>
+      <div class="queue-list">
+        <span *ngFor="let turn of status.waiting">{{ turn }}</span>
+        <em *ngIf="status.waiting.length === 0">Sin turnos en espera</em>
+      </div>
+    </div>
+  </section>
+
+  <section *ngIf="isWindowsScreen" class="windows-layout">
+    <article *ngFor="let windowItem of status.windows" class="window-card" [class.busy]="windowItem.status === 'busy'">
+      <div class="window-title">
+        <span>{{ windowItem.name }}</span>
+        <strong>{{ windowItem.status === 'busy' ? 'Ocupada' : 'Disponible' }}</strong>
+      </div>
+      <div class="current-turn">
+        <span>Turno actual</span>
+        <strong>{{ windowItem.currentTurn || '---' }}</strong>
+      </div>
+      <div class="window-actions">
+        <button type="button" class="secondary-action" (click)="assignTurn(windowItem)" [disabled]="loading || windowItem.status === 'busy' || status.waiting.length === 0">
+          Asignar siguiente
+        </button>
+        <button type="button" class="finish-action" (click)="finishTurn(windowItem)" [disabled]="loading || windowItem.status === 'available'">
+          Finalizado
+        </button>
+      </div>
+    </article>
+  </section>
+</main>
