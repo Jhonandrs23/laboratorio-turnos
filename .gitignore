@@ -1,0 +1,9 @@
+node_modules/
+.npm-cache/
+dist/
+.angular/
+.venv/
+__pycache__/
+*.pyc
+.env
+.vercel/
